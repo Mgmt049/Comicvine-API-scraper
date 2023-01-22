@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 17 22:40:38 2022
+#Created on Mon Jan 17 22:40:38 2022
+#Kevin Faterkowski
 
-@author: kevinfaterkowski
-"""
-#https://comicvine.gamespot.com/api/
+
+#01/07/2022 - initial script creation
+#1/22/2023 - "globalized" constants in process of converting to a Class...
+#REFERENCE: #https://comicvine.gamespot.com/api/
 
 import pandas as pd
 import requests 
@@ -16,13 +17,21 @@ import shutil as sh
 import time
 #from XlsxWriter import FileCreateError
 
+#############################################################################################
+#Constants to populate before execution:
+#############################################################################################
+##"path_output" - local or network folder/share to store outputs (inc'l log file)
+## "CV_API_KEY" - sign up for comicvine API and paste in your API key
+#############################################################################################
 GLOBALS = {"path_output":'C:\\Users\\00616891\\Downloads\\CV_API_output\\',
            "CV_API_KEY" : "f4c0a0d5001a93f785b68a8be6ef86f9831d4b5b", #do not use quotes around the key!
            #you must include this headers parameters because the comicvine API requires a "unique user agent" - cannot be null
            "headers":{"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"},
            "base_endpt":"http://comicvine.gamespot.com/api/",
+           "CV_resource" : "characters",
            "APIlog_file": "API_log.txt"
            }
+#############################################################################################
 
 def load_previous(dir_output):
     #to mark when previous dataset is loaded:
@@ -58,8 +67,7 @@ def load_previous(dir_output):
 
 def build_query_string(base_endpt, offset):
     
-    #CV_API_KEY = "f4c0a0d5001a93f785b68a8be6ef86f9831d4b5b" #do not use quotes around the key!
-    CV_resource = "characters"
+    #CV_resource = "characters"
     CV_query_string = "/?api_key="
     CV_filter_string = ""
     
@@ -69,7 +77,7 @@ def build_query_string(base_endpt, offset):
     
     resp_format = "&format=json"
     #return base_endpt + CV_resource + CV_query_string + CV_API_KEY + CV_filter_string + CV_sort_offset_string + resp_format
-    return base_endpt + CV_resource + CV_query_string + GLOBALS["CV_API_KEY"] + CV_filter_string + CV_sort_offset_string + resp_format
+    return base_endpt + GLOBALS["CV_resource"] + CV_query_string + GLOBALS["CV_API_KEY"] + CV_filter_string + CV_sort_offset_string + resp_format
 
 def normalize_df(json_CV):
     
@@ -90,7 +98,7 @@ def calc_offset(df):
 
 def make_request(full_endpt, headers, offset):
     
-    #ACTION: ENCAPSULATE EVERYTHING WITH A WITH AND WRITE TO LOGFILE IN THE ELSE CONDITIONS AND THE EXCEPTS!!!!!
+    #ACTION: WRITE EXCEPTIONS TO LOGFILE IN THE ELSE CONDITIONS AND THE EXCEPTS!!!!!
     with open(GLOBALS["path_output"]+GLOBALS["APIlog_file"], "a") as logfile:
         
         try:
@@ -175,7 +183,7 @@ def write_results(df_full_data, path_output):
 
 def main():
 
-    for i in range (0,10):    
+    for i in range (0,2):    
 
         #base_endpt = "http://comicvine.gamespot.com/api/"
         #you must include this headers parameters because the comicvine API requires a "unique user agent" - cannot be null
@@ -196,14 +204,14 @@ def main():
         json_CV = make_request(full_endpt, GLOBALS["headers"], offset)
         
         # Normalizing data - creates a dataFrame
-        #df_CV_norm = normalize_df(json_CV)
+        df_CV_norm = normalize_df(json_CV)
         
-        #df_full_data = combine_dfs([df_full_data,df_CV_norm]) #pass a list of dataframes: "old and new
+        df_full_data = combine_dfs([df_full_data,df_CV_norm]) #pass a list of dataframes: "old and new
             
-        #print("df_full_data in main(): ", df_full_data.shape)
+        print("df_full_data in main(): ", df_full_data.shape)
         
         #write combined results to file
-        #write_results(df_full_data, path_output)
+        write_results(df_full_data, GLOBALS["path_output"])
         
         #df_CV_norm = df_CV_norm.dropna()  #delete null values, BE CAREFUL WITH THIS AND NORMALIZATION
         #the following uses the loc operator
