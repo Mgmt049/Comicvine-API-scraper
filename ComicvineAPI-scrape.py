@@ -5,6 +5,7 @@
 
 #01/07/2022 - initial script creation
 #1/22/2023 - "globalized" constants in process of converting to a Class...
+#CREDIT TO: https://josephephillips.com/blog/how-to-use-comic-vine-api-part1
 #REFERENCE: #https://comicvine.gamespot.com/api/
 
 import pandas as pd
