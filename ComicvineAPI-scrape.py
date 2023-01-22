@@ -53,7 +53,7 @@ def load_previous(dir_output):
 
 def build_query_string(base_endpt, offset):
     
-    CV_API_KEY = "f4c0a0d5001a93f785b68a8be6ef86f9831d4b5b" #do not use quotes around the key!
+    CV_API_KEY = "<REPLACE WITH COMICVINE API KEY!>" #do not use quotes around the key!
     CV_resource = "characters"
     CV_query_string = "/?api_key="
     CV_filter_string = ""
