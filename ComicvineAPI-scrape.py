@@ -2,12 +2,6 @@
 #Created on Mon Jan 17 22:40:38 2022
 #Kevin Faterkowski
 
-
-#01/07/2022 - initial script creation
-#1/22/2023 - "globalized" constants in process of converting to a Class...
-#CREDIT TO: https://josephephillips.com/blog/how-to-use-comic-vine-api-part1
-#REFERENCE: #https://comicvine.gamespot.com/api/
-
 import pandas as pd
 import requests 
 import json 
@@ -19,17 +13,26 @@ import time
 #from XlsxWriter import FileCreateError
 
 #############################################################################################
+#PURPOSE:  is to retrive JSON from a ComicVine REST API endpoint and download to Excel records
+#CREDIT TO: https://josephephillips.com/blog/how-to-use-comic-vine-api-part1
+#REFERENCE: #https://comicvine.gamespot.com/api/
+#01/07/2022 - initial script creation
+#01/22/2023 - "globalized" constants in process of converting to a Class...
+#############################################################################################
 #Constants to populate before execution:
 #############################################################################################
 ##"path_output" - local or network folder/share to store outputs (inc'l log file)
 ## "CV_API_KEY" - sign up for comicvine API and paste in your API key
 #############################################################################################
+
+#ACTION: DO THIS https://towardsdatascience.com/6-approaches-to-validate-class-attributes-in-python-b51cffb8c4ea
 GLOBALS = {"path_output":'C:\\Users\\00616891\\Downloads\\CV_API_output\\',
            "CV_API_KEY" : "f4c0a0d5001a93f785b68a8be6ef86f9831d4b5b", #do not use quotes around the key!
            #you must include this headers parameters because the comicvine API requires a "unique user agent" - cannot be null
            "headers":{"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"},
            "base_endpt":"http://comicvine.gamespot.com/api/",
-           "CV_resource" : "characters",
+           #"CV_resource" : "characters",
+           "CV_resource" : "issues",
            "APIlog_file": "API_log.txt"
            }
 #############################################################################################
