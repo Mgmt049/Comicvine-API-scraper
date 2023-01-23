@@ -165,29 +165,24 @@ def write_results(df_full_data, path_output):
             #Excel threw a hard limit on 65K+ URLS error, so i had to use Excelwriter() and ingore URLs instead of .toExcel()
             #https://pandas.pydata.org/docs/reference/api/pandas.ExcelWriter.html
             #https://stackoverflow.com/questions/55280131/no-module-named-xlsxwriter-error-while-writing-pandas-df-to-excel/55280686
-            with pd.ExcelWriter(path_output, engine='xlsxwriter', options={'strings_to_urls': False}) as writer:
+            #https://stackoverflow.com/questions/71144242/which-arguments-is-futurewarning-use-of-kwargs-is-deprecated-use-engine-kwa
+            with pd.ExcelWriter(path_output, engine='xlsxwriter', engine_kwargs={'options':{'strings_to_urls': False}}) as writer:
                 df_full_data.to_excel(writer)
             
             print("timestamp pulled in write_results() %s"%(datetime.datetime.now()))
 
         except FileNotFoundError as e:
             print("this the FNF error", e)
-            err_file.write("this the FNF error %s "%(datetime.datetime.now()) )
+            err_file.write("{} this the FNF error {} ".format(datetime.datetime.now(), e) )
             sys.exit() #terminate the whole program
         except IOError as io:
             print("this the IO error: ", io)
-            err_file.write("this the IO error %s "%(datetime.datetime.now()) )
-            sys.exit() #terminate the whole program
-        #except FileCreateError as fce:
-        #    print("this the IO error: ", fce)
-        #    #err_file.write("this the FileCreateError error", datetime.datetime.now())
-        #    err_file.write("this the FileCreateError error %s"%(datetime.datetime.now()) )
-        #    sys.exit() #terminate the whole program
-
+            err_file.write("{} this the IO error {} ".format(datetime.datetime.now(), io) )
+            sys.exit() #terminate the whole program 
 
 def main():
 
-    for i in range (0,2):    
+    for i in range (0,10):    
 
         #base_endpt = "http://comicvine.gamespot.com/api/"
         #you must include this headers parameters because the comicvine API requires a "unique user agent" - cannot be null
@@ -210,7 +205,7 @@ def main():
         # Normalizing data - creates a dataFrame
         df_CV_norm = normalize_df(json_CV)
         
-        df_full_data = combine_dfs([df_full_data,df_CV_norm]) #pass a list of dataframes: "old and new
+        df_full_data = combine_dfs([df_full_data,df_CV_norm]) #pass a list of dataframes: "old" and new
             
         print("df_full_data in main(): ", df_full_data.shape)
         
