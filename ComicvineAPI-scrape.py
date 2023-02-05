@@ -183,8 +183,7 @@ def write_results(df_full_data, path_output):
 def main():
 
     for i in range (0,10):    
-
-        #base_endpt = "http://comicvine.gamespot.com/api/"
+        
         #you must include this headers parameters because the comicvine API requires a "unique user agent" - cannot be null
         #headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"}
         
